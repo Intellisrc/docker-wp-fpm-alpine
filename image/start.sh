@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 install=false
 if [[ -f /var/www/wp-config.php ]]; then
 	curr_ver=$(awk '/^\$wp_version/ { print $3 }' /var/www/wp-includes/version.php | sed "s/[';]//g")
@@ -20,26 +20,13 @@ if [[ $install == true ]]; then
 			rm wordpress.tar.gz; 
 			if chown -R lighttpd:lighttpd /tmp/wordpress/; then
 				if [[ -f /var/www/wp-config.php ]]; then
-					rm -rf /tmp/wordpress/wp-content/
-					rm -rf /tmp/wp-config*
-					if cp -Rp /var/www/wp-content/ /tmp/wordpress/wp-content/; then
-						if cp /var/www/wp-config.php /tmp/wordpress/; then
-							if [[ -d /var/www.back/ ]]; then
-								rm -rf /var/www.back/
-							fi
-							mv /var/www/ /var/www.back/
-							mv /tmp/wordpress/ /var/www/
-						else
-							echo "Failed to copy wp-config.php"
-							exit 4
-						fi
-					else
+					rm /tmp/wp-config*
+					if ! rsync -ia /tmp/wordpress/ /var/www/; then
 						echo "Failed to copy wp-content"
 						exit 3
 					fi
 				else
-					mv /tmp/wordpress/* /var/www/
-					rm -rf /tmp/wordpress/
+					rsync -ia /tmp/wordpress/ /var/www/;
 					settings="/var/www/wp-config-sample.php"
 					# DB_NAME
 					sed -i "s/database_name_here/$DB_NAME/" $settings
@@ -58,6 +45,7 @@ if [[ $install == true ]]; then
 					done
 					mv $settings /var/www/wp-config.php
 				fi
+				rm -rf /tmp/wordpress/
 			else
 				echo "Unable to set permissions in tmp"
 				exit 2
