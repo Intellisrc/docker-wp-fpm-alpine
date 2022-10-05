@@ -20,3 +20,8 @@ DB_CHARSET=utf8
 ```
 
 It will download the latest (or the version specified in "WP_VER"), and start the services `php-fpm` (background) and `lighttpd` (foreground).
+
+
+# Why?
+
+Comparing with the official build, this one is smaller (around 45MB) and uses less memory (less than 80MB RAM in low traffic). 
