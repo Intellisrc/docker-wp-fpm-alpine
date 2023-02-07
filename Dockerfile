@@ -1,5 +1,5 @@
 # Dockerfile for lighttpd
-FROM intellisrc/alpine:3.14
+FROM intellisrc/alpine:3.16
 EXPOSE 80
 VOLUME ["/var/www/wp-content"]
 

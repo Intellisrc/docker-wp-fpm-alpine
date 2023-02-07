@@ -12,9 +12,15 @@ else
 	install=true
 fi
 if [[ $install == true ]]; then
+	HYPHEN=""
+	SUBDOM=""
+	if [[ "$WP_LANG" != "" ]]; then
+		HYPHEN="-${WP_LANG}"
+		SUBDOM="${WP_LANG}."
+	fi
 	# Install Wordpress
-	sha1=$(curl -s "https://wordpress.org/wordpress-${WP_VER}.tar.gz.sha1"); 
-	curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-${WP_VER}.tar.gz"; 
+	sha1=$(curl -s "https://${SUBDOM}wordpress.org/wordpress-${WP_VER}${HYPHEN}.tar.gz.sha1"); 
+	curl -o wordpress.tar.gz -fL "https://${SUBDOM}wordpress.org/wordpress-${WP_VER}${HYPHEN}.tar.gz"; 
 	if echo "$sha1 *wordpress.tar.gz" | sha1sum -c -; then
 		if tar -xzf wordpress.tar.gz -C /tmp/; then
 			rm wordpress.tar.gz; 
