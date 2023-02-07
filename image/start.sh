@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "Starting..."
 install=false
 if [[ -f /var/www/wp-config.php ]]; then
 	curr_ver=$(awk '/^\$wp_version/ { print $3 }' /var/www/wp-includes/version.php | sed "s/[';]//g")
@@ -20,7 +21,9 @@ if [[ $install == true ]]; then
 	fi
 	# Install Wordpress
 	sha1=$(curl -s "https://${SUBDOM}wordpress.org/wordpress-${WP_VER}${HYPHEN}.tar.gz.sha1"); 
-	curl -o wordpress.tar.gz -fL "https://${SUBDOM}wordpress.org/wordpress-${WP_VER}${HYPHEN}.tar.gz"; 
+	wpurl="https://${SUBDOM}wordpress.org/wordpress-${WP_VER}${HYPHEN}.tar.gz"
+	echo "Downloading from: $wpurl ..."
+	curl -o wordpress.tar.gz -fL $wpurl
 	if echo "$sha1 *wordpress.tar.gz" | sha1sum -c -; then
 		if tar -xzf wordpress.tar.gz -C /tmp/; then
 			rm wordpress.tar.gz; 
@@ -34,6 +37,10 @@ if [[ $install == true ]]; then
 				else
 					rsync -ia /tmp/wordpress/ /var/www/;
 					settings="/var/www/wp-config-sample.php"
+					if [[ "$HTTPS_DOMAIN" != "" ]]; then
+				    # HTTPS Rules
+					sed -i "s/<?php/<?php\n\n\$ssl=true;\ndefine('MY_SITE','${HTTPS_DOMAIN}');\n\$_SERVER['HTTP_HOST'] = MY_SITE;\ndefine('WP_HOME','http\$(test \$ssl = true && echo s : ).'\/\/'.MY_SITE);\ndefine('WP_SITEURL','http\$(test \$ssl = true && echo s : ).'\/\/'.MY_SITE);\n\$_SERVER['HTTPS'] = \$ssl ? 'on' : 'off';/" $settings
+					fi
 					# DB_NAME
 					sed -i "s/database_name_here/$DB_NAME/" $settings
 					# DB_USER
