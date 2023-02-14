@@ -39,7 +39,7 @@ if [[ $install == true ]]; then
 					settings="/var/www/wp-config-sample.php"
 					if [[ "$HTTPS_DOMAIN" != "" ]]; then
 				    # HTTPS Rules
-					sed -i "s/<?php/<?php\n\n\$ssl=true;\ndefine('MY_SITE','${HTTPS_DOMAIN}');\n\$_SERVER['HTTP_HOST'] = MY_SITE;\ndefine('WP_HOME','http\$(test \$ssl = true && echo s : ).'\/\/'.MY_SITE);\ndefine('WP_SITEURL','http\$(test \$ssl = true && echo s : ).'\/\/'.MY_SITE);\n\$_SERVER['HTTPS'] = \$ssl ? 'on' : 'off';/" $settings
+					sed -i "s/<?php/<?php\n\n\$ssl=true;\ndefine('MY_SITE','${HTTPS_DOMAIN}');\n\$_SERVER['HTTP_HOST'] = MY_SITE;\ndefine('WP_HOME','http'.(\$ssl ? 's' : '').':\/\/'.MY_SITE);\ndefine('WP_SITEURL','http'.(\$ssl ? 's' : '').':\/\/'.MY_SITE);\n\$_SERVER['HTTPS'] = \$ssl ? 'on' : 'off';/" $settings
 					fi
 					# DB_NAME
 					sed -i "s/database_name_here/$DB_NAME/" $settings
