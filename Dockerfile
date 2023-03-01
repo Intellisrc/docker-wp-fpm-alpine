@@ -31,8 +31,7 @@ RUN mkdir -p /var/log/lighttpd/ && \
 	chown -R lighttpd.lighttpd /var/log/lighttpd/ && \
 	chown -R lighttpd.lighttpd /var/cache/lighttpd/ && \
 	ln -s /usr/sbin/php-fpm$PHP_VER /usr/sbin/php-fpm && \
-	ln -s /etc/php$PHP_VER /etc/php && \
-	ln -s /etc/php$PHP_VER/php-fpm.d/www.conf /etc/www.conf
+	ln -s /etc/php$PHP_VER /etc/php 
 
 WORKDIR /var/www
 CMD ["start.sh"]

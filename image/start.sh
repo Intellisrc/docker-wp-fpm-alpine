@@ -1,5 +1,9 @@
 #!/bin/bash
 echo "Starting..."
+if [[ $PHP_MIN_WORKERS == "" ]]; then
+	echo "Unable to read environment"
+	exit 1
+fi
 install=false
 if [[ -f /var/www/wp-config.php ]]; then
 	curr_ver=$(awk '/^\$wp_version/ { print $3 }' /var/www/wp-includes/version.php | sed "s/[';]//g")
@@ -41,7 +45,7 @@ if [[ $install == true ]]; then
 						patch -u "$settings" -i /etc/wp-config.patch
 						apk del patch
 						# HTTPS Rules
-						sed -i "s/HTTPS_DOMAIN/$HTTP_DOMAIN/" $settings
+						sed -i "s/HTTPS_DOMAIN/$HTTPS_DOMAIN/" $settings
 					fi
 					# DB_NAME
 					sed -i "s/database_name_here/$DB_NAME/" $settings
@@ -74,7 +78,7 @@ if [[ $install == true ]]; then
 	fi
 fi
 # Setting php-fpm config
-fpm_config=/etc/www.conf
+fpm_config=/etc/php/php-fpm.d/www.conf
 sed -i "s/PHP_MIN_WORKERS/$PHP_MIN_WORKERS/g" "$fpm_config"
 sed -i "s/PHP_MAX_WORKERS/$PHP_MAX_WORKERS/g" "$fpm_config"
 echo "Starting PHP-FPM...."
