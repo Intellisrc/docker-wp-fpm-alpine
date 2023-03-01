@@ -38,8 +38,10 @@ if [[ $install == true ]]; then
 					rsync -ia /tmp/wordpress/ /var/www/;
 					settings="/var/www/wp-config-sample.php"
 					if [[ "$HTTPS_DOMAIN" != "" ]]; then
-				    # HTTPS Rules
-					sed -i "s/<?php/<?php\n\n\$ssl=true;\ndefine('MY_SITE','${HTTPS_DOMAIN}');\n\$_SERVER['HTTP_HOST'] = MY_SITE;\ndefine('WP_HOME','http'.(\$ssl ? 's' : '').':\/\/'.MY_SITE);\ndefine('WP_SITEURL','http'.(\$ssl ? 's' : '').':\/\/'.MY_SITE);\n\$_SERVER['HTTPS'] = \$ssl ? 'on' : 'off';/" $settings
+						patch -u "$settings" -i /etc/wp-config.patch
+						apk del patch
+						# HTTPS Rules
+						sed -i "s/HTTPS_DOMAIN/$HTTP_DOMAIN/" $settings
 					fi
 					# DB_NAME
 					sed -i "s/database_name_here/$DB_NAME/" $settings
@@ -51,8 +53,10 @@ if [[ $install == true ]]; then
 					sed -i "s/localhost/${DB_HOST}/" $settings
 					# DB_CHARSET
 					sed -i "s/utf8/${DB_CHARSET}/" $settings
+					# WP_PREFIX
+					sed -i "s/'wp_'/'${WP_PREFIX}'/" $settings
 					# Keys: (sed in alpine needs to match somehow an index in order to replace once)
-					for j in {30..60}; do
+					for j in {55..65}; do
 						KEY=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 64 ; echo '')
 						sed -i "$j,/put your unique phrase here/{s/put your unique phrase here/$KEY/}" $settings
 					done
@@ -69,6 +73,10 @@ if [[ $install == true ]]; then
 		exit 1
 	fi
 fi
+# Setting php-fpm config
+fpm_config=/etc/www.conf
+sed -i "s/PHP_MIN_WORKERS/$PHP_MIN_WORKERS/g" "$fpm_config"
+sed -i "s/PHP_MAX_WORKERS/$PHP_MAX_WORKERS/g" "$fpm_config"
 echo "Starting PHP-FPM...."
 php-fpm -D
 echo "Starting lighttpd...."

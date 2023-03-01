@@ -1,0 +1,13 @@
+--- wp-config-sample.php	2023-03-01 13:27:58.316430645 +0900
++++ wp-config-custom.php	2023-03-01 13:27:53.628344494 +0900
+@@ -1,4 +1,10 @@
+ <?php
++$ssl=true;
++define('MY_SITE','HTTPS_DOMAIN');
++$_SERVER['HTTP_HOST'] = MY_SITE;
++define('WP_HOME','http'.($ssl ? 's' : '').'://'.MY_SITE);
++define('WP_SITEURL','http'.($ssl ? 's' : '').'://'.MY_SITE);
++$_SERVER['HTTPS'] = $ssl ? 'on' : 'off';
+ /**
+  * The base configuration for WordPress
+  *
