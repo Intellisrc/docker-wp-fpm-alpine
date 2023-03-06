@@ -4,8 +4,9 @@ Wordpress running with PHP-FPM (v7) and lighttpd inside a Docker container runni
 Arguments:
 
 ```
-ARG PHP_VER=7 (8 is not working yet)
+ARG PHP_VER=7
 ```
+ NOTE: for PHP8, see [php8 branch](/Intellisrc/docker-wp-fpm-alpine/tree/php8)
 
 Environment:
 
