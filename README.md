@@ -4,8 +4,9 @@ Wordpress running with PHP-FPM (v7) and lighttpd inside a Docker container runni
 Arguments:
 
 ```
-ARG PHP_VER=7 (8 is not working yet)
+ARG PHP_VER=81
 ```
+(81 = PHP 8.1)
 
 Environment:
 
