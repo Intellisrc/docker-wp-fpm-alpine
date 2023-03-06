@@ -80,6 +80,9 @@ fi
 # Setting health check file
 mv /etc/php/health_check.php /var/www/health_check.php
 
+# Starting redis
+redis-server &
+
 # Setting php-fpm config
 fpm_config=/etc/php/php-fpm.d/www.conf
 sed -i "s/PHP_MIN_WORKERS/$PHP_MIN_WORKERS/g" "$fpm_config"
