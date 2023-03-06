@@ -60,7 +60,7 @@ if [[ $install == true ]]; then
 					# WP_PREFIX
 					sed -i "s/'wp_'/'${WP_PREFIX}'/" $settings
 					# Keys: (sed in alpine needs to match somehow an index in order to replace once)
-					for j in {55..65}; do
+					for j in {50..65}; do
 						KEY=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 64 ; echo '')
 						sed -i "$j,/put your unique phrase here/{s/put your unique phrase here/$KEY/}" $settings
 					done
