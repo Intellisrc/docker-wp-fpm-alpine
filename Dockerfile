@@ -23,6 +23,7 @@ COPY image/lighttpd.conf /etc/lighttpd/
 COPY image/php-fpm.conf /etc/php$PHP_VER/php-fpm.d/www.conf
 COPY image/php.ini /etc/php$PHP_VER/
 COPY image/wp-config.patch /etc/wp-config.patch
+COPY image/health_check.php /etc/php$PHP_VER/health_check.php
 COPY image/start.sh /usr/local/bin/
 
 RUN mkdir -p /var/log/lighttpd/ && \
