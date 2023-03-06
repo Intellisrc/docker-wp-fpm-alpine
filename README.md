@@ -1,5 +1,5 @@
 # docker-wp-fpm-alpine
-Wordpress running with PHP-FPM (v7) and lighttpd inside a Docker container running Alpine
+Wordpress running with PHP-FPM (v7) and lighttpd inside a Docker container running Alpine with Redis as object cache.
 
 Arguments:
 
