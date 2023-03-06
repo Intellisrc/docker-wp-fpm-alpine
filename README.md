@@ -10,7 +10,10 @@ ARG PHP_VER=7 (8 is not working yet)
 Environment:
 
 ```
+PHP_MIN_WORKERS=1
+PHP_MAX_WORKERS=20
 WP_VER=latest
+WP_PREFIX=wp_
 DB_NAME=
 DB_USER=
 DB_PASSWORD=
