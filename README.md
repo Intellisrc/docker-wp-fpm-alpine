@@ -6,7 +6,7 @@ Arguments:
 ```
 ARG PHP_VER=7
 ```
- NOTE: for PHP8, see [php8 branch](/Intellisrc/docker-wp-fpm-alpine/tree/php8)
+ NOTE: for PHP8, see [php8 branch](https://github.com/Intellisrc/docker-wp-fpm-alpine/tree/php8)
 
 Environment:
 
