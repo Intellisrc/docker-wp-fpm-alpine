@@ -1,5 +1,5 @@
 --- wp-config-sample.php	2023-03-01 13:27:58.316430645 +0900
-+++ wp-config-custom.php	2023-03-01 13:27:53.628344494 +0900
++++ wp-config-custom.php	2023-03-06 10:28:33.116258461 +0900
 @@ -1,4 +1,10 @@
  <?php
 +$ssl=true;
@@ -11,3 +11,11 @@
  /**
   * The base configuration for WordPress
   *
+@@ -93,4 +99,6 @@
+ }
+ 
+ /** Sets up WordPress vars and included files. */
+-require_once ABSPATH . 'wp-settings.php';
++if ( ! defined( 'HEALTH_CHECK' ) ) {
++	require_once ABSPATH . 'wp-settings.php';
++}

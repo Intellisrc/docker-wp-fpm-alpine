@@ -1,4 +1,6 @@
 <?php
+// Flag to skip loading all wordpress:
+define("HEALTH_CHECK", true);
 // Load WordPress configuration file
 require_once('wp-config.php');
 
@@ -10,10 +12,18 @@ if ($mysqli->connect_errno) {
 }
 
 // Test WordPress installation
-$response = wp_remote_get("http://localhost/", ['timeout' => 60]);
-if (is_wp_error($response)) {
-    echo "Error: Failed to connect to WordPress site.";
-    exit();
+$headers = get_headers("http://localhost/", false, stream_context_set_default(
+    array(
+        'http' => array(
+            'timeout' => 60
+        )
+    )
+));
+//var_dump($headers);
+$code = substr($headers[0], 9, 1) * 1;
+if($code > 3) {
+	echo "Error: Invalid response: $code";
+	exit();
 }
 
 // Everything seems fine
