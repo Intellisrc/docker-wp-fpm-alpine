@@ -1,5 +1,11 @@
 # docker-wp-fpm-alpine
-Wordpress running with PHP-FPM (v8.1) and lighttpd inside a Docker container running Alpine with Redis as object cache.
+Wordpress running with PHP-FPM (v8.1) and lighttpd inside a Docker container running Alpine.
+
+## Docker:
+
+`intellisrc/wp-fpm-alpine:3.17`
+
+## Setup:
 
 Arguments:
 
@@ -25,7 +31,6 @@ DB_CHARSET=utf8
 
 It will download the latest (or the version specified in "WP_VER"), and start the services `php-fpm` (background) and `lighttpd` (foreground).
 
+## Why?
 
-# Why?
-
-Comparing with the official build, this one is smaller (around 45MB) and uses less memory (less than 80MB RAM in low traffic). 
+Comparing with the official build, this one is smaller (around 45MB) and uses less memory (less than 125MB RAM with `PHP_MIN_WORKERS=1`, or less than 80MB with `PHP_MIN_WORKERS=0` in low traffic). 

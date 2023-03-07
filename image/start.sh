@@ -42,8 +42,9 @@ if [[ $install == true ]]; then
 					rsync -ia /tmp/wordpress/ /var/www/;
 					settings="/var/www/wp-config-sample.php"
 					if [[ "$HTTPS_DOMAIN" != "" ]]; then
-						patch -u "$settings" -i /etc/wp-config.patch
+						patch -u "$settings" -i /var/www/wp-config.patch
 						apk del patch
+						rm /var/www/wp-config.patch
 						# HTTPS Rules
 						sed -i "s/HTTPS_DOMAIN/$HTTPS_DOMAIN/" $settings
 					fi
@@ -77,8 +78,6 @@ if [[ $install == true ]]; then
 		exit 1
 	fi
 fi
-# Setting health check file
-mv /etc/php/health_check.php /var/www/health_check.php
 
 # Starting redis
 redis-server &
