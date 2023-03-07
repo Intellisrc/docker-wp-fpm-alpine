@@ -7,16 +7,10 @@ Wordpress running with PHP-FPM (v8.1) and lighttpd inside a Docker container run
 
 ## Setup:
 
-Arguments:
-
-```
-ARG PHP_VER=81
-```
-(81 = PHP 8.1)
-
 Environment:
 
 ```
+PHP_VER=81
 PHP_MIN_WORKERS=1
 PHP_MAX_WORKERS=20
 WP_VER=latest
@@ -27,6 +21,7 @@ DB_PASSWORD=
 DB_PASS=
 DB_HOST=localhost
 DB_CHARSET=utf8
+OBJ_CACHE=none  #options: memcached, redis
 ```
 
 It will download the latest (or the version specified in "WP_VER"), and start the services `php-fpm` (background) and `lighttpd` (foreground).
@@ -55,6 +50,7 @@ services:
       HTTPS_DOMAIN: example.com
       PHP_MIN_WORKERS: 0
       PHP_MAX_WORKERS: 10
+	  OBJ_CACHE: memcached
       #WP_LANG: ja
     healthcheck:
       test: wget -q -O - http://localhost/health_check.php | grep "ok"

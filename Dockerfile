@@ -13,7 +13,10 @@ ENV DB_PASSWORD=
 ENV DB_PASS=
 ENV DB_HOST=localhost
 ENV DB_CHARSET=utf8
-ARG PHP_VER=81
+# Object cache options: "redis", "memcached" or "none"
+ENV OBJ_CACHE=none
+# Adjust properly if needed:
+ENV PHP_VER=81
 
 RUN apk add --update --no-cache \
 	curl rsync patch lighttpd \
