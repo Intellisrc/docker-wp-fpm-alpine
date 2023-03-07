@@ -21,6 +21,7 @@ DB_PASSWORD=
 DB_PASS=
 DB_HOST=localhost
 DB_CHARSET=utf8
+OBJ_CACHE=none  #options: memcached, redis
 ```
 
 It will download the latest (or the version specified in "WP_VER"), and start the services `php-fpm` (background) and `lighttpd` (foreground).

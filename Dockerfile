@@ -14,6 +14,8 @@ ENV DB_PASSWORD=
 ENV DB_PASS=
 ENV DB_HOST=localhost
 ENV DB_CHARSET=utf8
+# Object cache options: "redis", "memcached" or "none"
+ENV OBJ_CACHE=none
 
 RUN apk add --update --no-cache \
 	curl rsync patch lighttpd \

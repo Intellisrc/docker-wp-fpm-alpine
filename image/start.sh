@@ -4,6 +4,19 @@ if [[ $PHP_MIN_WORKERS == "" ]]; then
 	echo "Unable to read environment"
 	exit 1
 fi
+case $OBJ_CACHE in
+    "memcached" )
+        apk add --update --no-cache memcached php$PHP_VER-pecl-memcached
+        memcached -d -u litespeed
+        rm -rf /var/cache/apk/*
+    ;;
+    "redis" )
+        apk add --update --no-cache redis
+        redis-server &
+        rm -rf /var/cache/apk/*
+    ;;
+esac
+
 install=false
 if [[ -f /var/www/wp-config.php ]]; then
 	curr_ver=$(awk '/^\$wp_version/ { print $3 }' /var/www/wp-includes/version.php | sed "s/[';]//g")
