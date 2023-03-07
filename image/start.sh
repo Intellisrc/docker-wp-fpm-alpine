@@ -92,9 +92,6 @@ if [[ $install == true ]]; then
 	fi
 fi
 
-# Starting redis
-redis-server &
-
 # Setting php-fpm config
 fpm_config=/etc/php/php-fpm.d/www.conf
 sed -i "s/PHP_MIN_WORKERS/$PHP_MIN_WORKERS/g" "$fpm_config"
