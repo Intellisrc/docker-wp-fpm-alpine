@@ -30,7 +30,7 @@ It will download the latest (or the version specified in "WP_VER"), and start th
 
 Example:
 
-```
+```yaml
 services:
   wp:
     image: intellisrc/wp-fpm-alpine:3.17
@@ -50,7 +50,7 @@ services:
       HTTPS_DOMAIN: example.com
       PHP_MIN_WORKERS: 0
       PHP_MAX_WORKERS: 10
-	  OBJ_CACHE: memcached
+      OBJ_CACHE: memcached
       #WP_LANG: ja
     healthcheck:
       test: wget -q -O - http://localhost/health_check.php | grep "ok"
