@@ -1,10 +1,12 @@
 <?php
-$ssl=true;
-define('MY_SITE','HTTPS_DOMAIN');
+$ssl=HTTPS;
+define('MY_SITE','DOMAIN');
 $_SERVER['HTTP_HOST'] = MY_SITE;
 define('WP_HOME','http'.($ssl ? 's' : '').'://'.MY_SITE);
 define('WP_SITEURL','http'.($ssl ? 's' : '').'://'.MY_SITE);
 $_SERVER['HTTPS'] = $ssl ? 'on' : 'off';
+?>
+<?php
 /**
  * The base configuration for WordPress
  *
@@ -34,14 +36,29 @@ define( 'DB_USER', 'username_here' );
 /** Database password */
 define( 'DB_PASSWORD', 'password_here' );
 
-/** Database hostname */
-define( 'DB_HOST', 'localhost' );
+/** Database hostname (used in health_check) */
+define( 'DB_HOSTNAME', 'localhost' );
+
+/** Database port (used in health_check) */
+define( 'DB_PORT', 3306 );
+
+/** Database hostname (used by WP) */
+define( 'DB_HOST', DB_HOSTNAME.(DB_PORT ? ":".DB_PORT : "") );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
 
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
+
+/** Enable SSL for Database **/
+define("DB_SSL", db_ssl_enabled);
+if(DB_SSL) {
+	define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);
+	define('MYSQL_SSL_CA', '/etc/ssl/cert.pem');
+} else {
+	define('MYSQL_CLIENT_FLAGS', 0);
+}
 
 /**#@+
  * Authentication unique keys and salts.

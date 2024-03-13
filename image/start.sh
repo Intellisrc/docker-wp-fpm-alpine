@@ -54,13 +54,20 @@ if [[ $install == true ]]; then
 				else
 					rsync -ia /tmp/wordpress/ /var/www/;
 					settings="/var/www/wp-config-sample.php"
+					patch -u "$settings" -i /var/www/wp-config.patch
+					#TMP: backward compatibility:
 					if [[ "$HTTPS_DOMAIN" != "" ]]; then
-						patch -u "$settings" -i /var/www/wp-config.patch
-						apk del patch
-						rm /var/www/wp-config.patch
-						# HTTPS Rules
-						sed -i "s/HTTPS_DOMAIN/$HTTPS_DOMAIN/" $settings
+						DOMAIN="$HTTPS_DOMAIN";
+						HTTPS="true";
 					fi
+					if [[ "$DOMAIN" != "" ]]; then
+						sed -i "s/DOMAIN/$DOMAIN/" $settings
+						sed -i "s/=HTTPS/=$HTTPS/" $settings
+					else # If domain is not specified, remove header code
+						sed -i -e 1,8d $settings
+					fi
+					rm /var/www/wp-config.patch
+
 					# DB_NAME
 					sed -i "s/database_name_here/$DB_NAME/" $settings
 					# DB_USER
@@ -69,6 +76,10 @@ if [[ $install == true ]]; then
 					sed -i "s/password_here/${DB_PASS:-$DB_PASSWORD}/" $settings
 					# DB_HOST
 					sed -i "s/localhost/${DB_HOST}/" $settings
+					# DB_PORT
+					sed -i "s/ 3306 / ${DB_PORT:-3306} /" $settings
+					# DB_SSL
+					sed -i "s/db_ssl_enabled/${DB_SSL}/" $settings
 					# DB_CHARSET
 					sed -i "s/utf8/${DB_CHARSET}/" $settings
 					# WP_PREFIX
@@ -91,6 +102,25 @@ if [[ $install == true ]]; then
 		exit 1
 	fi
 fi
+
+init_script=${INIT_SCRIPT:-"/home/init.sh"}
+if [[ ! -f $init_script ]]; then
+	init_script="/var/www/wp-content/init.sh";
+fi
+if [[ -f "$init_script" ]]; then
+	echo "Starting custom script..."
+	chmod +rx "$init_script"
+	bash "$init_script"
+	chmod -rwx "$init_script"
+	echo "Custom script executed."
+else
+	echo "INFO: You can customize this site by adding 'init.sh' script under 'wp-content' directory";
+fi
+
+# Lock root:
+chown root.root /var/www/
+chown root.root /var/www/*
+chown lighttpd.lighttpd /var/www/wp-content/
 
 # Setting php-fpm config
 fpm_config=/etc/php/php-fpm.d/www.conf
