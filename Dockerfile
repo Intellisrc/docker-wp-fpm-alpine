@@ -22,6 +22,7 @@ RUN apk add --update --no-cache \
 	php$PHP_VER-fpm php$PHP_VER-ctype php$PHP_VER-common php$PHP_VER-intl \
 	php$PHP_VER-curl php$PHP_VER-gd php$PHP_VER-json php$PHP_VER-mysqli \
 	php$PHP_VER-zip php$PHP_VER-session php$PHP_VER-dom php$PHP_VER-mbstring \
+    php$PHP_VER-xml php$PHP_VER-simplexml php$PHP_VER-xmlwriter \
 	php$PHP_VER-iconv php$PHP_VER-opcache php$PHP_VER-exif php$PHP_VER-fileinfo && \
 	rm -rf /var/cache/apk/*
 
