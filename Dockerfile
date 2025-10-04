@@ -1,16 +1,16 @@
 # Dockerfile for lighttpd
-FROM intellisrc/alpine:3.14
+FROM intellisrc/alpine:3.6
 EXPOSE 80
 VOLUME ["/var/www/wp-content"]
 
-ARG PHP_VER=7
+ARG PHP_VER=5
 ENV PHP_MIN_WORKERS=1
 ENV PHP_MAX_WORKERS=20
 ENV WP_VER=latest
 ENV WP_PREFIX=wp_
-ENV DB_NAME=
-ENV DB_USER=
-ENV DB_PASS=
+ENV DB_NAME=dbname
+ENV DB_USER=user
+ENV DB_PASS=pass
 ENV DB_HOST=localhost
 ENV DB_CHARSET=utf8
 # Object cache options: "redis", "memcached" or "none"
@@ -20,8 +20,8 @@ RUN apk add --update --no-cache \
 	curl rsync patch lighttpd \
 	php$PHP_VER-fpm php$PHP_VER-ctype php$PHP_VER-common php$PHP_VER-intl \
 	php$PHP_VER-curl php$PHP_VER-gd php$PHP_VER-json php$PHP_VER-mysqli \
-	php$PHP_VER-zip php$PHP_VER-session php$PHP_VER-dom php$PHP_VER-mbstring \
-	php$PHP_VER-iconv php$PHP_VER-opcache php$PHP_VER-exif php$PHP_VER-fileinfo && \
+	php$PHP_VER-zip php$PHP_VER-dom \
+	php$PHP_VER-iconv php$PHP_VER-opcache php$PHP_VER-exif && \
 	rm -rf /var/cache/apk/*
 
 COPY image/lighttpd.conf /etc/lighttpd/
