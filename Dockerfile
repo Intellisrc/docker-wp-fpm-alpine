@@ -5,9 +5,10 @@ VOLUME ["/var/www/wp-content"]
 
 ENV WP_VER=latest
 ENV WP_PREFIX=wp_
-ENV DB_NAME=
-ENV DB_USER=
-ENV DB_PASS=
+ENV DB_NAME=dbname
+ENV DB_USER=user
+ENV DB_PASS=pass
+ENV DB_SSL=false
 ENV DB_HOST=localhost
 ENV DB_CHARSET=utf8
 # Object cache options: "redis", "memcached" or "none"
