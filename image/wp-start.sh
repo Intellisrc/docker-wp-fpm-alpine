@@ -1,9 +1,5 @@
 #!/bin/bash
 echo "Starting..."
-if [[ $PHP_MIN_WORKERS == "" ]]; then
-	echo "Unable to read environment"
-	exit 1
-fi
 case $OBJ_CACHE in
     "memcached" )
         apk add --update --no-cache memcached php$PHP_VER-pecl-memcached
@@ -54,6 +50,8 @@ if [[ $install == true ]]; then
 				else
 					rsync -ia /tmp/wordpress/ /var/www/;
 					settings="/var/www/wp-config-sample.php"
+					dos2unix $settings
+					dos2unix /var/www/wp-config.patch
 					patch -u "$settings" -i /var/www/wp-config.patch
 					#TMP: backward compatibility:
 					if [[ "$HTTPS_DOMAIN" != "" ]]; then
@@ -118,15 +116,16 @@ else
 fi
 
 # Lock root:
-chown root.root /var/www/
-chown root.root /var/www/*
-chown lighttpd.lighttpd /var/www/wp-content/
+chown root:root /var/www/
+chown root:root /var/www/*
+chown lighttpd:lighttpd /var/www/wp-content/
 
-# Setting php-fpm config
-fpm_config=/etc/php/php-fpm.d/www.conf
-sed -i "s/PHP_MIN_WORKERS/$PHP_MIN_WORKERS/g" "$fpm_config"
-sed -i "s/PHP_MAX_WORKERS/$PHP_MAX_WORKERS/g" "$fpm_config"
-echo "Starting PHP-FPM...."
-php-fpm -D
-echo "Starting lighttpd...."
-lighttpd -D -f /etc/lighttpd/lighttpd.conf
+WP_CONF="/etc/lighttpd/lighttpd-wp.conf"
+if [[ -f $WP_CONF ]]; then
+	cat $WP_CONF >> /etc/lighttpd/lighttpd.conf
+else
+	echo "WP patch for lighttpd not found"
+fi
+
+# Executing PHP start.sh
+/usr/local/bin/start.sh
