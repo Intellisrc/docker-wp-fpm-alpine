@@ -1,5 +1,5 @@
 # Dockerfile for lighttpd
-FROM intellisrc/alpine:3.17
+FROM intellisrc/alpine:3.22
 EXPOSE 80
 VOLUME ["/var/www/wp-content"]
 
@@ -15,7 +15,7 @@ ENV DB_CHARSET=utf8
 # Object cache options: "redis", "memcached" or "none"
 ENV OBJ_CACHE=none
 # Adjust properly if needed:
-ENV PHP_VER=81
+ENV PHP_VER=84
 
 RUN apk add --update --no-cache \
 	curl rsync patch lighttpd \

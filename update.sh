@@ -8,3 +8,4 @@ echo "VERSION: $ver"
 docker build -t wp-fpm-alpine .
 docker tag wp-fpm-alpine:latest intellisrc/wp-fpm-alpine:$ver
 docker push intellisrc/wp-fpm-alpine:$ver
+echo "Updated: intellisrc/wp-fpm-alpine:$ver"
