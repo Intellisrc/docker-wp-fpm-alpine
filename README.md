@@ -1,16 +1,16 @@
 # docker-wp-fpm-alpine
-Wordpress running with PHP-FPM (v8.1) and lighttpd inside a Docker container running Alpine.
+Wordpress running with PHP-FPM (v8) and lighttpd inside a Docker container running Alpine.
 
 ## Docker:
 
-`intellisrc/wp-fpm-alpine:3.17`
+`intellisrc/wp-fpm-alpine:3.22`
 
 ## Setup:
 
 Environment:
 
 ```
-PHP_VER=81
+PHP_VER=84
 PHP_MIN_WORKERS=1
 PHP_MAX_WORKERS=20
 WP_VER=latest
