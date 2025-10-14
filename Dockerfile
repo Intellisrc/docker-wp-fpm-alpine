@@ -20,7 +20,7 @@ RUN apk add --update --no-cache \
 	curl rsync patch lighttpd \
 	php$PHP_VER-fpm php$PHP_VER-ctype php$PHP_VER-common php$PHP_VER-intl \
 	php$PHP_VER-curl php$PHP_VER-gd php$PHP_VER-json php$PHP_VER-mysqli \
-	php$PHP_VER-zip php$PHP_VER-dom php$PHP_VER-fpm \
+	php$PHP_VER-zip php$PHP_VER-dom \
 	php$PHP_VER-iconv php$PHP_VER-opcache php$PHP_VER-exif && \
 	rm -rf /var/cache/apk/*
 
@@ -36,7 +36,7 @@ RUN mkdir -p /var/log/lighttpd/ && \
     mkdir -p /var/cache/lighttpd/compress/ && \
 	chown -R lighttpd.lighttpd /var/log/lighttpd/ && \
 	chown -R lighttpd.lighttpd /var/cache/lighttpd/ && \
-	ln -s /usr/bin/php-fpm$PHP_VER /usr/sbin/php-fpm && \
+	ln -s /usr/sbin/php-fpm$PHP_VER /usr/sbin/php-fpm && \
 	ln -s /etc/php$PHP_VER /etc/php 
 
 WORKDIR /var/www
