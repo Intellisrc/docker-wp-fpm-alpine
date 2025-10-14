@@ -29,6 +29,7 @@ COPY image/lighttpd.conf /etc/lighttpd/
 COPY image/php-fpm.conf /etc/php$PHP_VER/php-fpm.d/www.conf
 COPY image/php.ini /etc/php$PHP_VER/
 COPY image/wp-config.patch /var/www/wp-config.patch
+COPY image/wp-config-ja.patch /var/www/wp-config-ja.patch
 COPY image/health_check.php /var/www/health_check.php
 COPY image/start.sh /usr/local/bin/
 

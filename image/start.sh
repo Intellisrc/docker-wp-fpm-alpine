@@ -42,10 +42,17 @@ if [[ $install == true ]]; then
 				else
 					rsync -ia /tmp/wordpress/ /var/www/;
 					settings="/var/www/wp-config-sample.php"
+					patch_file="/var/www/wp-config.patch"
+					if grep "基本設定" $settings; then
+					  patch_file="/var/www/wp-config-ja.patch"
+          fi
+					dos2unix "$settings"
+					dos2unix "$patch_file"
+
 					if [[ "$HTTPS_DOMAIN" != "" ]]; then
-						patch -u "$settings" -i /var/www/wp-config.patch
+						patch -u "$settings" -i "$patch_file"
 						apk del patch
-						rm /var/www/wp-config.patch
+						rm "$patch_file"
 						# HTTPS Rules
 						sed -i "s/HTTPS_DOMAIN/$HTTPS_DOMAIN/" $settings
 					fi

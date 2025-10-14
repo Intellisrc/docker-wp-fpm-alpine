@@ -1,0 +1,23 @@
+--- wp-config-sample-ja.php	2025-10-14 19:32:46.083575447 +0900
++++ wp-config-custom-ja.php	2025-10-14 19:34:19.952116209 +0900
+@@ -1,4 +1,10 @@
+ <?php
++$ssl=true;
++define('MY_SITE','HTTPS_DOMAIN');
++$_SERVER['HTTP_HOST'] = MY_SITE;
++define('WP_HOME','http'.($ssl ? 's' : '').'://'.MY_SITE);
++define('WP_SITEURL','http'.($ssl ? 's' : '').'://'.MY_SITE);
++$_SERVER['HTTPS'] = $ssl ? 'on' : 'off';
+ /**
+  * WordPress の基本設定
+  *
+@@ -90,4 +96,6 @@
+         define('ABSPATH', dirname(__FILE__) . '/');
+ 
+ /** Sets up WordPress vars and included files. */
+-require_once(ABSPATH . 'wp-settings.php');
+\ No newline at end of file
++if ( ! defined( 'HEALTH_CHECK' ) ) {
++	require_once ABSPATH . 'wp-settings.php';
++}
+\ No newline at end of file
