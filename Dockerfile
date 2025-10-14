@@ -24,6 +24,7 @@ RUN apk add --update --no-cache \
 	php$PHP_VER-iconv php$PHP_VER-opcache php$PHP_VER-exif && \
 	rm -rf /var/cache/apk/*
 
+RUN mv /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.orig
 COPY image/lighttpd.conf /etc/lighttpd/
 COPY image/php-fpm.conf /etc/php$PHP_VER/php-fpm.d/www.conf
 COPY image/php.ini /etc/php$PHP_VER/
@@ -31,12 +32,13 @@ COPY image/wp-config.patch /var/www/wp-config.patch
 COPY image/health_check.php /var/www/health_check.php
 COPY image/start.sh /usr/local/bin/
 
+# PHP5 is in /usr/bin/
 RUN mkdir -p /var/log/lighttpd/ && \
     mkdir -p /var/cache/lighttpd/uploads/ && \
     mkdir -p /var/cache/lighttpd/compress/ && \
 	chown -R lighttpd.lighttpd /var/log/lighttpd/ && \
 	chown -R lighttpd.lighttpd /var/cache/lighttpd/ && \
-	ln -s /usr/sbin/php-fpm$PHP_VER /usr/sbin/php-fpm && \
+	ln -s /usr/bin/php-fpm$PHP_VER /usr/sbin/php-fpm && \
 	ln -s /etc/php$PHP_VER /etc/php 
 
 WORKDIR /var/www
