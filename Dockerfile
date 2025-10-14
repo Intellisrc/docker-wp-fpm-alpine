@@ -1,4 +1,5 @@
 # Dockerfile for lighttpd
+# Compile for versions: 3.8, 3.10 and 3.14
 FROM intellisrc/alpine:3.14
 EXPOSE 80
 VOLUME ["/var/www/wp-content"]
@@ -8,9 +9,9 @@ ENV PHP_MIN_WORKERS=1
 ENV PHP_MAX_WORKERS=20
 ENV WP_VER=latest
 ENV WP_PREFIX=wp_
-ENV DB_NAME=
-ENV DB_USER=
-ENV DB_PASS=
+ENV DB_NAME=dbname
+ENV DB_USER=user
+ENV DB_PASS=pass
 ENV DB_HOST=localhost
 ENV DB_CHARSET=utf8
 # Object cache options: "redis", "memcached" or "none"
