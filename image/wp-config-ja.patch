@@ -1,5 +1,5 @@
---- wp-config-sample-ja.php	2025-10-14 19:32:46.083575447 +0900
-+++ wp-config-custom-ja.php	2025-10-14 19:34:19.952116209 +0900
+--- wp-config-sample-ja.php	2025-10-15 14:11:35.566264363 +0900
++++ wp-config-custom-ja.php	2025-10-15 14:11:35.566264363 +0900
 @@ -1,4 +1,10 @@
  <?php
 +$ssl=false;
