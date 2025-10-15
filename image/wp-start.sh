@@ -1,5 +1,9 @@
 #!/bin/bash
 echo "Starting..."
+if [[ $PHP_MIN_WORKERS == "" ]]; then
+	echo "Unable to read environment"
+	exit 1
+fi
 case $OBJ_CACHE in
     "memcached" )
         apk add --update --no-cache memcached php$PHP_VER-pecl-memcached
@@ -50,21 +54,25 @@ if [[ $install == true ]]; then
 				else
 					rsync -ia /tmp/wordpress/ /var/www/;
 					settings="/var/www/wp-config-sample.php"
-					dos2unix $settings
-					dos2unix /var/www/wp-config.patch
-					patch -u "$settings" -i /var/www/wp-config.patch
-					#TMP: backward compatibility:
+					patch_file="/var/www/wp-config.patch"
+					dos2unix "$settings"
+					dos2unix "$patch_file"
+
+					patch -u "$settings" -i "$patch_file"
+					apk del patch
+					rm "$patch_file"
+
+					# HTTPS Rules
 					if [[ "$HTTPS_DOMAIN" != "" ]]; then
-						DOMAIN="$HTTPS_DOMAIN";
-						HTTPS="true";
+						sed -i "s/HTTPS_DOMAIN/$HTTPS_DOMAIN/" $settings
+					  sed -i "s/ssl=false/ssl=true/" $settings
+					else
+            if [[ "$DOMAIN" != "" ]]; then
+              sed -i "s/HTTPS_DOMAIN/$DOMAIN/" $settings
+            else
+					    sed -i "s/'HTTPS_DOMAIN'/\$_SERVER['HTTP_HOST']/" $settings
+					  fi
 					fi
-					if [[ "$DOMAIN" != "" ]]; then
-						sed -i "s/DOMAIN/$DOMAIN/" $settings
-						sed -i "s/=HTTPS/=$HTTPS/" $settings
-					else # If domain is not specified, remove header code
-						sed -i -e 1,8d $settings
-					fi
-					rm /var/www/wp-config.patch
 
 					# DB_NAME
 					sed -i "s/database_name_here/$DB_NAME/" $settings
