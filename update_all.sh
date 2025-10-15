@@ -1,8 +1,7 @@
 #!/bin/bash
-./update.sh
-sed -i "s/FROM intellisrc/alpine:3.14/FROM intellisrc/alpine:3.10" Dockerfile
-./update.sh
-sed -i "s/FROM intellisrc/alpine:3.10/FROM intellisrc/alpine:3.8" Dockerfile
-./update.sh
-sed -i "s/FROM intellisrc/alpine:3.8/FROM intellisrc/alpine:3.14" Dockerfile
+for ver in "3.8" "3.10" "3.14"; do
+  echo "----------------------------- $ver -----------------------------"
+  sed -i "s/FROM intellisrc\/alpine:.*/FROM intellisrc\/alpine:${ver}/" Dockerfile
+  ./update.sh
+done
 echo "Done"
