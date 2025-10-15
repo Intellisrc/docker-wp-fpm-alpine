@@ -57,6 +57,7 @@ if [[ $install == true ]]; then
           head -n -2 "$settings" > wp-config.tmp && \
           cat "$footer" >> wp-config.tmp && \
           mv wp-config.tmp "$settings"
+          rm "$footer"
 
 					# HTTPS Rules
 					if [[ "$HTTPS_DOMAIN" != "" ]]; then
