@@ -65,6 +65,10 @@ if [[ $install == true ]]; then
 					sed -i "s/password_here/${DB_PASS:-$DB_PASSWORD}/" $settings
 					# DB_HOST
 					sed -i "s/localhost/${DB_HOST}/" $settings
+					# DB_PORT
+					sed -i "s/ 3306 / ${DB_PORT:-3306} /" $settings
+					# DB_SSL
+					sed -i "s/db_ssl_enabled/${DB_SSL}/" $settings
 					# DB_CHARSET
 					sed -i "s/utf8/${DB_CHARSET}/" $settings
 					# WP_PREFIX
@@ -88,11 +92,31 @@ if [[ $install == true ]]; then
 	fi
 fi
 
-# Setting php-fpm config
-fpm_config=/etc/php/php-fpm.d/www.conf
-sed -i "s/PHP_MIN_WORKERS/$PHP_MIN_WORKERS/g" "$fpm_config"
-sed -i "s/PHP_MAX_WORKERS/$PHP_MAX_WORKERS/g" "$fpm_config"
-echo "Starting PHP-FPM...."
-php-fpm -D
-echo "Starting lighttpd...."
-lighttpd -D -f /etc/lighttpd/lighttpd.conf
+init_script=${INIT_SCRIPT:-"/home/init.sh"}
+if [[ ! -f $init_script ]]; then
+	init_script="/var/www/wp-content/init.sh";
+fi
+if [[ -f "$init_script" ]]; then
+	echo "Starting custom script..."
+	chmod +rx "$init_script"
+	bash "$init_script"
+	chmod -rwx "$init_script"
+	echo "Custom script executed."
+else
+	echo "INFO: You can customize this site by adding 'init.sh' script under 'wp-content' directory";
+fi
+
+# Lock root:
+chown root:root /var/www/
+chown root:root /var/www/*
+chown lighttpd:lighttpd /var/www/wp-content/
+
+WP_CONF="/etc/lighttpd/lighttpd-wp.conf"
+if [[ -f $WP_CONF ]]; then
+	cat $WP_CONF >> /etc/lighttpd/lighttpd.conf
+else
+	echo "WP patch for lighttpd not found"
+fi
+
+# Executing PHP start.sh
+/usr/local/bin/start.sh

@@ -39,4 +39,4 @@ RUN mkdir -p /var/log/lighttpd/ && \
 	ln -s /etc/php$PHP_VER /etc/php 
 
 WORKDIR /var/www
-CMD ["start.sh"]
+CMD ["wp-start.sh"]
