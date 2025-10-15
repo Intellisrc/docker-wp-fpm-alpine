@@ -41,21 +41,22 @@ if [[ $install == true ]]; then
 					fi
 				else
 					rsync -ia /tmp/wordpress/ /var/www/;
+					# We don't use patch, as there are many changes in the wp-config.php in older versions
 					settings="/var/www/wp-config-sample.php"
-					patch_file="/var/www/wp-config.patch"
-					if grep "基本設定" $settings; then
-					  patch_file="/var/www/wp-config-ja.patch"
-          fi
+					header="/var/www/wp-config-header.php"
+					footer="/var/www/wp-config-footer.php"
 					dos2unix "$settings"
-					dos2unix "$patch_file"
+					dos2unix "$header"
+					dos2unix "$footer"
 
-					if ! patch -u "$settings" -i "$patch_file"; then
-					  # If it fails, it means that wp-config-sample.php is not the same.
-					  echo "Unable to patch settings"
-					  exit 4
-				  fi
-					apk --no-cache del patch
-					rm "$patch_file"
+          # Replace headers
+          tail -n +2 "$settings" >> "$header"
+          mv "$header" "$settings"
+
+          # Replace footer
+          head -n -2 "$settings" > wp-config.tmp && \
+          cat "$footer" >> wp-config.tmp && \
+          mv wp-config.tmp "$settings"
 
 					# HTTPS Rules
 					if [[ "$HTTPS_DOMAIN" != "" ]]; then
@@ -97,8 +98,6 @@ fi
 
 # Cleanup
 rm -rf /var/www/localhost/
-rm /var/www/wp-config-sample*
-rm /var/www/*.patch
 
 # Setting php-fpm config
 fpm_config=/etc/php/php-fpm.d/www.conf
