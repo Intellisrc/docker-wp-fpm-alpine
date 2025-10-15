@@ -49,8 +49,12 @@ if [[ $install == true ]]; then
 					dos2unix "$settings"
 					dos2unix "$patch_file"
 
-					patch -u "$settings" -i "$patch_file"
-					apk del patch
+					if ! patch -u "$settings" -i "$patch_file"; then
+					  # If it fails, it means that wp-config-sample.php is not the same.
+					  echo "Unable to patch settings"
+					  exit 4
+				  fi
+					apk --no-cache del patch
 					rm "$patch_file"
 
 					# HTTPS Rules
@@ -73,7 +77,7 @@ if [[ $install == true ]]; then
 					# WP_PREFIX
 					sed -i "s/'wp_'/'${WP_PREFIX}'/" $settings
 					# Keys: (sed in alpine needs to match somehow an index in order to replace once)
-					for j in {50..65}; do
+					for j in {45..65}; do
 						KEY=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 64 ; echo '')
 						sed -i "$j,/put your unique phrase here/{s/put your unique phrase here/$KEY/}" $settings
 					done
@@ -90,6 +94,11 @@ if [[ $install == true ]]; then
 		exit 1
 	fi
 fi
+
+# Cleanup
+rm -rf /var/www/localhost/
+rm /var/www/wp-config-sample*
+rm /var/www/*.patch
 
 # Setting php-fpm config
 fpm_config=/etc/php/php-fpm.d/www.conf
