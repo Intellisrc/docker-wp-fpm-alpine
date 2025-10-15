@@ -49,12 +49,16 @@ if [[ $install == true ]]; then
 					dos2unix "$settings"
 					dos2unix "$patch_file"
 
+					patch -u "$settings" -i "$patch_file"
+					apk del patch
+					rm "$patch_file"
+
+					# HTTPS Rules
 					if [[ "$HTTPS_DOMAIN" != "" ]]; then
-						patch -u "$settings" -i "$patch_file"
-						apk del patch
-						rm "$patch_file"
-						# HTTPS Rules
-						sed -i "s/HTTPS_DOMAIN/$HTTPS_DOMAIN/" $settings
+					  sed -i "s/HTTPS_DOMAIN/$HTTPS_DOMAIN/" $settings
+					  sed -i "s/ssl=false/ssl=true/" $settings
+					else
+					  sed -i "s/'HTTPS_DOMAIN'/\$_SERVER['HTTP_HOST']/" $settings
 					fi
 					# DB_NAME
 					sed -i "s/database_name_here/$DB_NAME/" $settings

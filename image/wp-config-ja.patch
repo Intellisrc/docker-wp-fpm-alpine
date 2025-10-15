@@ -2,7 +2,7 @@
 +++ wp-config-custom-ja.php	2025-10-14 19:34:19.952116209 +0900
 @@ -1,4 +1,10 @@
  <?php
-+$ssl=true;
++$ssl=false;
 +define('MY_SITE','HTTPS_DOMAIN');
 +$_SERVER['HTTP_HOST'] = MY_SITE;
 +define('WP_HOME','http'.($ssl ? 's' : '').'://'.MY_SITE);
