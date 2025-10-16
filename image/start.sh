@@ -97,6 +97,32 @@ if [[ $install == true ]]; then
 	fi
 fi
 
+init_script=${INIT_SCRIPT:-"/home/init.sh"}
+if [[ ! -f $init_script ]]; then
+	init_script="/var/www/wp-content/init.sh";
+fi
+if [[ -f "$init_script" ]]; then
+	echo "Starting custom script..."
+	chmod +rx "$init_script"
+	bash "$init_script"
+	chmod -rwx "$init_script"
+	echo "Custom script executed."
+else
+	echo "INFO: You can customize this site by adding 'init.sh' script under 'wp-content' directory";
+fi
+
+# Lock root:
+chown root:root /var/www/
+chown root:root /var/www/*
+chown lighttpd:lighttpd /var/www/wp-content/
+
+WP_CONF="/etc/lighttpd/lighttpd-wp.conf"
+if [[ -f $WP_CONF ]]; then
+	cat $WP_CONF >> /etc/lighttpd/lighttpd.conf
+else
+	echo "WP patch for lighttpd not found"
+fi
+
 # Cleanup
 rm -rf /var/www/localhost/
 
