@@ -73,6 +73,7 @@ if [[ $install == true ]]; then
               sed -i "s/=HTTPS/=false/" $settings
             else
 					    sed -i "s/'DOMAIN'/\$_SERVER['HTTP_HOST']/" $settings
+              sed -i "s/=HTTPS/=false/" $settings
 					  fi
 					fi
 
