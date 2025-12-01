@@ -26,7 +26,7 @@ RUN apk add --update --no-cache \
 
 RUN mv /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.orig
 COPY image/lighttpd.conf /etc/lighttpd/
-COPY image/php-fpm.conf /etc/php$PHP_VER/php-fpm.d/www.conf
+COPY image/php-fpm.conf /etc/php$PHP_VER/fpm.d/www.conf
 COPY image/php.ini /etc/php$PHP_VER/
 COPY image/wp-config-header.php /var/www/wp-config-header.php
 COPY image/wp-config-footer.php /var/www/wp-config-footer.php
