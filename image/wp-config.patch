@@ -1,8 +1,8 @@
---- wp-config-sample.php	2023-03-01 13:27:58.316430645 +0900
-+++ wp-config-custom.php	2023-03-06 10:28:33.116258461 +0900
+--- wp-config-sample.php	2025-12-23 11:30:49.811663935 +0900
++++ wp-config-custom.php	2025-12-23 16:25:17.804535735 +0900
 @@ -1,4 +1,10 @@
  <?php
-+$ssl=false;
++$ssl=true;
 +define('MY_SITE','HTTPS_DOMAIN');
 +$_SERVER['HTTP_HOST'] = MY_SITE;
 +define('WP_HOME','http'.($ssl ? 's' : '').'://'.MY_SITE);
@@ -11,7 +11,15 @@
  /**
   * The base configuration for WordPress
   *
-@@ -93,4 +99,6 @@
+@@ -80,6 +86,7 @@
+  * @link https://wordpress.org/support/article/debugging-in-wordpress/
+  */
+ define( 'WP_DEBUG', false );
++define( 'WP_CACHE', true );
+ 
+ /* Add any custom values between this line and the "stop editing" line. */
+ 
+@@ -93,4 +100,6 @@
  }
  
  /** Sets up WordPress vars and included files. */
