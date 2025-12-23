@@ -1,5 +1,5 @@
---- wp-config-sample.php	2023-03-01 13:27:58.000000000 +0900
-+++ wp-config-custom.php	2023-05-31 14:08:54.929605633 +0900
+--- wp-config-sample.php	2025-12-23 11:30:49.811663935 +0900
++++ wp-config-custom.php	2025-12-23 15:47:42.158084301 +0900
 @@ -1,4 +1,12 @@
  <?php
 +$ssl=HTTPS;
@@ -46,7 +46,20 @@
  /**#@+
   * Authentication unique keys and salts.
   *
-@@ -93,4 +116,6 @@
+@@ -79,7 +102,11 @@
+  *
+  * @link https://wordpress.org/support/article/debugging-in-wordpress/
+  */
+-define( 'WP_DEBUG', false );
++define( 'WP_DEBUG', true);
++define( 'WP_DEBUG_LOG', true);
++define( 'WP_DEBUG_DISPLAY', false );
++
++define( 'WP_CACHE', true );
+ 
+ /* Add any custom values between this line and the "stop editing" line. */
+ 
+@@ -93,4 +120,6 @@
  }
  
  /** Sets up WordPress vars and included files. */

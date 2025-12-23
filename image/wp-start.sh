@@ -7,7 +7,7 @@ fi
 case $OBJ_CACHE in
     "memcached" )
         apk add --update --no-cache memcached php$PHP_VER-pecl-memcached
-        memcached -d -u litespeed
+        memcached -d -u lighttpd
         rm -rf /var/cache/apk/*
     ;;
     "redis" )
