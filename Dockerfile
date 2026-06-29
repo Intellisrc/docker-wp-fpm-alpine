@@ -16,9 +16,6 @@ ENV OBJ_CACHE=none
 
 RUN apk add --update --no-cache \
 	curl rsync patch lighttpd \
-	php$PHP_VER-session php$PHP_VER-mbstring \
-    php$PHP_VER-simplexml php$PHP_VER-xmlwriter \
-	php$PHP_VER php$PHP_VER-fileinfo && \
 	rm -rf /var/cache/apk/*
 
 COPY image/lighttpd-wp.conf /etc/lighttpd/
