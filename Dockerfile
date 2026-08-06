@@ -1,5 +1,5 @@
 # Dockerfile for lighttpd
-FROM intellisrc/php8-fpm-alpine:3.22
+FROM intellisrc/php8-fpm-alpine:3.24
 EXPOSE 80
 VOLUME ["/var/www/wp-content"]
 
@@ -15,7 +15,7 @@ ENV DB_CHARSET=utf8
 ENV OBJ_CACHE=none
 
 RUN apk add --update --no-cache \
-	curl rsync patch lighttpd \
+	curl rsync patch lighttpd && \
 	rm -rf /var/cache/apk/*
 
 COPY image/lighttpd-wp.conf /etc/lighttpd/
