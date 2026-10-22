@@ -4,18 +4,19 @@ if [[ $PHP_MIN_WORKERS == "" ]]; then
 	echo "Unable to read environment"
 	exit 1
 fi
+apk update
+apk upgrade
 case $OBJ_CACHE in
     "memcached" )
         apk add --update --no-cache memcached php$PHP_VER-pecl-memcached
         memcached -d -u lighttpd
-        rm -rf /var/cache/apk/*
     ;;
     "redis" )
         apk add --update --no-cache redis
         redis-server &
-        rm -rf /var/cache/apk/*
     ;;
 esac
+rm -rf /var/cache/apk/*
 
 install=false
 if [[ -f /var/www/wp-config.php ]]; then
